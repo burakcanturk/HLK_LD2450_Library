@@ -6,9 +6,7 @@
 #define ld2450_begin_bytes_len 4
 #define ld2450_end_bytes_len 2
 
-#define ld2450_values_len 8
-
-#define ld2450_trash_vals_len 16
+#define ld2450_values_len 24
 
 #define ld2450_all_datas_len 30
 
@@ -33,10 +31,10 @@ class HLK_LD2450 {
     HLK_LD2450(uint8_t rx, uint8_t tx);
     void begin();
     void read();
-    int16_t getTargetX();
-    int16_t getTargetY();
-    int16_t getSpeed();
-    uint16_t getDistanceResolution();
+    int16_t getTargetX(uint8_t loc = 0);
+    int16_t getTargetY(uint8_t loc = 0);
+    int16_t getSpeed(uint8_t loc = 0);
+    uint16_t getDistanceResolution(uint8_t loc = 0);
 
   private:
 
@@ -73,7 +71,7 @@ class HLK_LD2450 {
       int16_t target_y;
       int16_t speed;
       uint16_t distance_resolution;
-    } ld2450_data;
+    } ld2450_data[3];
 };
 
 #endif
