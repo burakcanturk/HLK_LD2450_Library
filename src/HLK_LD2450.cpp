@@ -131,19 +131,21 @@ void HLK_LD2450::read() {
     uint16_t end_bytes_sum_calc;
 
     memcpy(&begin_bytes_sum_calc, all_datas, ld2450_begin_bytes_len);
-    memcpy(&end_bytes_sum_calc, all_datas + ld2450_begin_bytes_len + ld2450_values_len + ld2450_trash_vals_len, ld2450_end_bytes_len);
+    memcpy(&end_bytes_sum_calc, all_datas + ld2450_begin_bytes_len + ld2450_values_len, ld2450_end_bytes_len);
 
     if (begin_bytes_sum_calc == begin_bytes_sum and end_bytes_sum_calc == end_bytes_sum) {
-      ld2450_data.target_x = -(all_datas[ld2450_begin_bytes_len] + all_datas[ld2450_begin_bytes_len + 1] * 0x100);
-      ld2450_data.target_y = (all_datas[ld2450_begin_bytes_len + 2] + all_datas[ld2450_begin_bytes_len + 3] * 0x100) - (1 << 15);
-      ld2450_data.speed = -(all_datas[ld2450_begin_bytes_len + 4] + all_datas[ld2450_begin_bytes_len + 5] * 0x100);
-      ld2450_data.distance_resolution = all_datas[ld2450_begin_bytes_len + 6] + all_datas[ld2450_begin_bytes_len + 7] * 0x100;
+      for (int i = 0; i < 3; i++) {
+        ld2450_data[i].target_x = -(all_datas[ld2450_begin_bytes_len + i * 8] + all_datas[ld2450_begin_bytes_len + i * 8 + 1] * 0x100);
+        ld2450_data[i].target_y = (all_datas[ld2450_begin_bytes_len + i * 8 + 2] + all_datas[ld2450_begin_bytes_len + i * 8 + 3] * 0x100) - (1 << 15);
+        ld2450_data[i].speed = -(all_datas[ld2450_begin_bytes_len + i * 8 + 4] + all_datas[ld2450_begin_bytes_len + i * 8 + 5] * 0x100);
+        ld2450_data[i].distance_resolution = all_datas[ld2450_begin_bytes_len + i * 8 + 6] + all_datas[ld2450_begin_bytes_len + i * 8 + 7] * 0x100;
+      }
     }
   }
 
 #endif
 
-  if(not is_soft) {
+  if (not is_soft) {
 
     byte data = 0;
 
@@ -159,29 +161,32 @@ void HLK_LD2450::read() {
     uint16_t end_bytes_sum_calc;
 
     memcpy(&begin_bytes_sum_calc, all_datas, ld2450_begin_bytes_len);
-    memcpy(&end_bytes_sum_calc, all_datas + ld2450_begin_bytes_len + ld2450_values_len + ld2450_trash_vals_len, ld2450_end_bytes_len);
+    memcpy(&end_bytes_sum_calc, all_datas + ld2450_begin_bytes_len + ld2450_values_len, ld2450_end_bytes_len);
 
     if (begin_bytes_sum_calc == begin_bytes_sum and end_bytes_sum_calc == end_bytes_sum) {
-      ld2450_data.target_x = -(all_datas[ld2450_begin_bytes_len] + all_datas[ld2450_begin_bytes_len + 1] * 0x100);
-      ld2450_data.target_y = (all_datas[ld2450_begin_bytes_len + 2] + all_datas[ld2450_begin_bytes_len + 3] * 0x100) - (1 << 15);
-      ld2450_data.speed = -(all_datas[ld2450_begin_bytes_len + 4] + all_datas[ld2450_begin_bytes_len + 5] * 0x100);
-      ld2450_data.distance_resolution = all_datas[ld2450_begin_bytes_len + 6] + all_datas[ld2450_begin_bytes_len + 7] * 0x100;
+
+      for (int i = 0; i < 3; i++) {
+        ld2450_data[i].target_x = -(all_datas[ld2450_begin_bytes_len + i * 8] + all_datas[ld2450_begin_bytes_len + i * 8 + 1] * 0x100);
+        ld2450_data[i].target_y = (all_datas[ld2450_begin_bytes_len + i * 8 + 2] + all_datas[ld2450_begin_bytes_len + i * 8 + 3] * 0x100) - (1 << 15);
+        ld2450_data[i].speed = -(all_datas[ld2450_begin_bytes_len + i * 8 + 4] + all_datas[ld2450_begin_bytes_len + i * 8 + 5] * 0x100);
+        ld2450_data[i].distance_resolution = all_datas[ld2450_begin_bytes_len + i * 8 + 6] + all_datas[ld2450_begin_bytes_len + i * 8 + 7] * 0x100;
+      }
     }
   }
 }
 
-int16_t HLK_LD2450::getTargetX() {
-  return ld2450_data.target_x;
+int16_t HLK_LD2450::getTargetX(uint8_t loc) {
+  return ld2450_data[loc].target_x;
 }
 
-int16_t HLK_LD2450::getTargetY() {
-  return ld2450_data.target_y;
+int16_t HLK_LD2450::getTargetY(uint8_t loc) {
+  return ld2450_data[loc].target_y;
 }
 
-int16_t HLK_LD2450::getSpeed() {
-  return ld2450_data.speed;
+int16_t HLK_LD2450::getSpeed(uint8_t loc) {
+  return ld2450_data[loc].speed;
 }
 
-uint16_t HLK_LD2450::getDistanceResolution() {
-  return ld2450_data.distance_resolution;
+uint16_t HLK_LD2450::getDistanceResolution(uint8_t loc) {
+  return ld2450_data[loc].distance_resolution;
 }
