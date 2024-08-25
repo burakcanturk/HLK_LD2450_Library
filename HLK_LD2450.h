@@ -20,18 +20,8 @@
 class HLK_LD2450 {
 
   public:
-#ifndef ESP32
-#ifndef _BOARD_GENERIC_STM32F103C_H_
-    HLK_LD2450(SoftwareSerial *ssUart);
-#endif
-#else
-    HLK_LD2450(EspSoftwareSerial::UART *ssEspUart);
-    HLK_LD2450(uint8_t rx, uint8_t tx, EspSoftwareSerial::UART *ssEspUart);
-    HLK_LD2450(uint8_t rx, uint8_t tx, HardwareSerial *hsUart);
-#endif
-    HLK_LD2450(HardwareSerial *hsUart);
-    HLK_LD2450(uint8_t rx, uint8_t tx);
-    void begin();
+    HLK_LD2450(Stream *ser);
+    //void begin();
     void read();
     int16_t getTargetX();
     int16_t getTargetY();
@@ -39,23 +29,8 @@ class HLK_LD2450 {
     uint16_t getDistanceResolution();
 
   private:
-
-    bool is_soft;
-
-#ifndef ESP32
-#ifndef _BOARD_GENERIC_STM32F103C_H_
-    SoftwareSerial *SS;
-#endif
-#else
-    EspSoftwareSerial::UART *SS;
-#endif
-    HardwareSerial *HS;
-
-    bool with_pins;
-    bool with_ser;
-
-    uint16_t rx_pin;
-    uint16_t tx_pin;
+  
+    Stream *ser;
 
     const byte begin_bytes_len = 4;
     const byte end_bytes_len = 2;
